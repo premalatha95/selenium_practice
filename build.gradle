@@ -1,9 +1,15 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
     mavenCentral()
@@ -11,15 +17,34 @@ repositories {
 
 dependencies {
     // https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager
-    implementation group: 'io.github.bonigarcia', name: 'webdrivermanager', version: '6.0.1'
+    implementation 'io.github.bonigarcia:webdrivermanager:6.0.1'
     // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.31.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
     // https://mvnrepository.com/artifact/org.testng/testng
     testImplementation 'org.testng:testng:7.11.0'
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
     implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
+    // Logback dependencies
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
+
+    implementation 'ch.qos.logback:logback-core:1.4.14'
 }
 
 test {
-    useJUnitPlatform()
+    systemProperties = System.properties
+    useTestNG() {
+        useDefaultListeners = true
+        suites 'src/test/resources/testng.xml'
+    }
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showStandardStreams = true
+    }
+    outputs.upToDateWhen { false }
+    
+    // Configure test report directory
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
 }
