@@ -4,6 +4,7 @@ import org.example.pages.LaunchPage;
 import org.example.pages.SearchPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class TestSearchPage extends BaseTest {
@@ -11,13 +12,20 @@ public class TestSearchPage extends BaseTest {
 
     @Test
     public void verifySearchFunctionality() {
-
-        String product = "Shoes";
-
+        // Arrange
+        log.info("Setting Up Test Case");
+        String productName = "shoes for girls";
         LaunchPage launchPage = new LaunchPage(driver);
         launchPage.navigateTo("https://www.amazon.in/");
 
+        // Act
+        log.info("Executing Test Case");
         SearchPage search = new SearchPage(driver);
-        search.searchForTheProduct(product);
+        search.searchForTheProduct(productName);
+        String firstOption = search.fetchSearchResults();
+
+        // Assert
+        log.info("Validating Test Case");
+        Assert.assertTrue(firstOption.contains(productName), "Received Invalid Autocomplete Suggestion");
     }
 }
