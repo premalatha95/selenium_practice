@@ -24,26 +24,25 @@ public class SearchPage extends BasePage {
     @FindBy(css = "#sac-autocomplete-results-container .s-suggestion-ellipsis-direction")
     private List<WebElement> autocompleteSuggestions;
 
-    @FindBy(xpath = "(//img[@class='s-image'])[5]")
-    private WebElement itemToBeSearched;
-
     public SearchPage(WebDriver driver) {
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    public void searchForTheProduct(String productName) {
+    public ProductsPage searchForTheProduct(String productName) {
         log.info("Searching for productName: {}", productName);
         sendKeys(searchTextField, productName);
         log.info("Searching for productList");
+        return new ProductsPage(driver);
     }
 
     public String fetchSearchResults() {
         String firstSuggestion;
         try {
-            waitUntil(autocompleteSuggestions);
+            waitUntilListIsVisible(autocompleteSuggestions);
             firstSuggestion = autocompleteSuggestions.get(0)
                     .getDomAttribute("aria-label");
+            autocompleteSuggestions.get(0).click();
         } catch (StaleElementReferenceException e) {
             log.info("Retrying to find search results");
             driver.manage()
@@ -52,9 +51,11 @@ public class SearchPage extends BasePage {
             List<WebElement> searchResults = driver.findElements(By.cssSelector("#sac-autocomplete-results-container .s-suggestion-ellipsis-direction"));
             firstSuggestion = searchResults.get(0)
                     .getDomAttribute("aria-label");
+            searchResults.get(0).click();
+
         }
+
         log.info("productName: {}", firstSuggestion);
         return firstSuggestion;
     }
 }
-

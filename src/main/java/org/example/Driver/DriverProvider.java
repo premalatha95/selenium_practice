@@ -20,7 +20,7 @@ public class DriverProvider {
 
     public void initDriver(){
         try {
-            String browser = System.getProperty("browser", "chrome");
+            String browser = System.getProperty("browser", "firefox");
             log.info("Browser Property Value {}", browser);
 
             switch (browser.toLowerCase()){

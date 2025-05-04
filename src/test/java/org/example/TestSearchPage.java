@@ -1,6 +1,9 @@
 package org.example;
 
+import org.example.dto.Product;
 import org.example.pages.LaunchPage;
+import org.example.pages.ProductDescriptionPage;
+import org.example.pages.ProductsPage;
 import org.example.pages.SearchPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +21,11 @@ public class TestSearchPage extends BaseTest {
         LaunchPage launchPage = new LaunchPage(driver);
         launchPage.navigateTo("https://www.amazon.in/");
 
+
         // Act
         log.info("Executing Test Case");
         SearchPage search = new SearchPage(driver);
-        search.searchForTheProduct(productName);
+        ProductsPage productsPage = search.searchForTheProduct(productName);
         String firstOption = search.fetchSearchResults();
 
         // Assert
